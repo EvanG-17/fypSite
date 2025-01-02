@@ -1,6 +1,18 @@
+<!--https://jinja.palletsprojects.com/en/stable/-->
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Welcome to My Flask Website!</h1>
-<p>This is the home page.</p>
+<!-- <h1>Welcome to My Flask Website!</h1>
+<p>This is the home page.</p> -->
+
+<div style="text-align: center; margin-top: 50px;">
+    <form method="post" enctype="multipart/form-data">
+        <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
+        <br><br>
+        <input type="file" id="fileUpload" name="fileUpload" style="padding: 10px;">
+        <br><br>
+    
+    </form>
+</div>
 {% endblock %}
+
