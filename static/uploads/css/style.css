@@ -1,0 +1,33 @@
+/* Center align the form */
+form {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Style the file input */
+input[type="file"] {
+    display: inline-block;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Style the submit button */
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the button */
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
