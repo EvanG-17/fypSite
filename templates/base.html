@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Site</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .top-bar {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        .content {
-            margin-top: 50px; 
-            padding: 20px;
-        }
-    </style>
+    <title>FYP Demo</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <!-- Top Bar -->
     <div class="top-bar">
+        <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
         Neural Network-Based Deepfake Detection
     </div>
+    
+    <!-- Dashboard -->
+    <div id="myDashboard" class="dashboard">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeDashboard()">&times;</a>
+        <a href="#">Previous Results</a>
+        <a href="#">SETU</a>
+        <a href="#">About Us</a>
+        <a href="#">Settings</a>
+    </div>
+
+    <!-- Content -->
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+
+    <!-- JavaScript -->
+    <script>
+        function openDashboard() {
+            document.getElementById("myDashboard").style.width = "250px";
+        }
+        function closeDashboard() {
+            document.getElementById("myDashboard").style.width = "0";
+        }
+    </script>
 </body>
 </html>
