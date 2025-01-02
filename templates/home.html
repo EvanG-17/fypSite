@@ -2,17 +2,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- <h1>Welcome to My Flask Website!</h1>
-<p>This is the home page.</p> -->
-
 <div style="text-align: center; margin-top: 50px;">
     <form method="post" enctype="multipart/form-data">
         <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
         <br><br>
         <input type="file" id="fileUpload" name="fileUpload" style="padding: 10px;">
         <br><br>
-    
+        <button type="submit" style="padding: 10px 20px; font-size: 16px;">Detect</button>
     </form>
+
+    {% if uploaded_image %}
+    <div style="margin-top: 30px;">
+        <h3>Uploaded Image:</h3>
+        <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" alt="Uploaded Image" style="max-width: 50%; border: 1px solid #ccc; padding: 10px;">
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
+
 
