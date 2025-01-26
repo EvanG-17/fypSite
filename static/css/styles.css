@@ -6,12 +6,14 @@ body {
 .top-bar {
     background-color: #333;
     color: white;
+    padding: 5px 15px;
     padding: 10px 20px;
     text-align: center;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    
 }
 .content {
     margin-top: 50px;
@@ -58,7 +60,24 @@ body {
     padding: 10px 15px;
     margin: 10px;
     transition: 0.3s;
+    
 }
 .open-btn:hover {
     background-color: #575757;
+}
+
+/* https://www.youtube.com/watch?v=DHlV65WTG3k&ab_channel=WebTechInDepth */
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #27bdd7; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    font-size: 16px;
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #c61e40; 
 }
