@@ -43,6 +43,9 @@ def home():
     # no image displayed when user visits our home page
     return render_template('home.html', uploaded_image=None)
 
-# starts Flask application in debug mode, this helps display error messages in browser which are more detailed than usual.
+
+# starts Flask application
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use the PORT environment variable for deployment
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
