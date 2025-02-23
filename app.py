@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for
 import os
 import torch
 import torch.nn as nn
-import torch.nn.functional as F  # For softmax
+import torch.nn.functional as F  # For using the softmax function
 import torchvision.transforms as transforms
 from PIL import Image
-from timm import create_model  # Import timm
+from timm import create_model  # Import timm for EfficentNet model
 
 app = Flask(__name__)
 
@@ -72,5 +72,7 @@ def home():
 
 # Start Flask app
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
+    import os
+    port = int(os.environ.get("PORT", 10000))  # Use Render's port if available
     app.run(host="0.0.0.0", port=port, debug=True)
+
