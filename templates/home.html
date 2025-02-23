@@ -11,16 +11,16 @@
 
     {% if uploaded_image %}
     <div style="margin-top: 30px; text-align: center;">
-    <h3>Uploaded Image:</h3>
-    <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
-         style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
-    
-    <!-- Text box directly below the image -->
-    <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
-        Your image is <strong>95%</strong> likely to be deepfaked.
+        <h3>Uploaded Image:</h3>
+        <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
+             style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
+        
+        <!-- Text box to display the Deepfake probability -->
+        <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
+            Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
+        </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
 </div>
 {% endblock %}
