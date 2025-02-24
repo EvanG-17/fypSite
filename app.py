@@ -15,9 +15,6 @@ from functools import wraps
 
 app = Flask(__name__)
 
-# Firebase creds
-cred = credentials.Certificate("config/firebase_credentials.json")
-firebase_admin.initialize_app(cred)
 
 # Create upload folder and allow specific file extensions
 UPLOAD_FOLDER = 'static/uploads'
