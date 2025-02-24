@@ -8,10 +8,10 @@ from PIL import Image
 from timm import create_model  # Import timm for EfficentNet model
 
 # Firebase imports
-import firebase_admin
-from firebase_admin import auth, credentials
-from flask import Flask, request, jsonify
-from functools import wraps
+# import firebase_admin
+# from firebase_admin import auth, credentials
+# from flask import Flask, request, jsonify
+# from functools import wraps
 
 app = Flask(__name__)
 
