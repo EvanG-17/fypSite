@@ -7,7 +7,17 @@ import torchvision.transforms as transforms
 from PIL import Image
 from timm import create_model  # Import timm for EfficentNet model
 
+# Firebase imports
+import firebase_admin
+from firebase_admin import auth, credentials
+from flask import Flask, request, jsonify
+from functools import wraps
+
 app = Flask(__name__)
+
+# Firebase creds
+cred = credentials.Certificate("config/firebase_credentials.json")
+firebase_admin.initialize_app(cred)
 
 # Create upload folder and allow specific file extensions
 UPLOAD_FOLDER = 'static/uploads'
@@ -73,6 +83,6 @@ def home():
 # Start Flask app
 if __name__ == '__main__':
     import os
-    port = int(os.environ.get("PORT", 10000))  # Use Render's port if available
+    port = int(os.environ.get("PORT", 10000))  # Using renders own port due to "No open ports detected" error
     app.run(host="0.0.0.0", port=port, debug=True)
 
