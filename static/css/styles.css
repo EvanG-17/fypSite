@@ -81,3 +81,41 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"]::-webkit-file-upload-button:hover {
     background-color: #c61e40; 
 }
+
+.info-box {
+    position: relative;
+    display: block;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Soft shadow */
+    width: 300px;
+    text-align: center;
+    margin: 200px auto;
+    transition: all 0.3s ease-in-out; /* Smooth hover transition */
+}
+
+/* Hover Effect: Slight Lift and Stronger Shadow */
+.info-box:hover {
+    transform: translateY(-5px); /* Moves box up slightly */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow on hover */
+}
+
+.hidden {
+    display: none !important; /* Ensures it can be hidden */
+}
+
+
+
+
+.info-title {
+    color: #007bff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.info-text {
+    font-size: 16px;
+    color: #666;
+}
+

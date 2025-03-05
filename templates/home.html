@@ -2,12 +2,23 @@
 
 {% block content %}
 <div style="text-align: center; margin-top: 50px;">
+
+    
+
+    <!-- File Upload Form -->
     <form method="post" enctype="multipart/form-data">
         <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
         <br><br>
         <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3" style="width: 50%; margin: 0 auto;">
-        <button type="submit" class="btn btn-primary">Detect</button>
+        <button type="submit" class="btn btn-primary" id="detectButton">Detect</button>
     </form>
+
+
+    <!-- Info Box -->
+    <div id="infoBox" class="info-box">
+        <h3 class="info-title">Instant, Free Deepfake Detection</h3>
+        <p class="info-text">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
+    </div>
 
     {% if uploaded_image %}
     <div style="margin-top: 30px; text-align: center;">
@@ -15,7 +26,6 @@
         <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
              style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
         
-        <!-- Text box to display the Deepfake probability -->
         <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
             Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
         </div>
@@ -23,4 +33,39 @@
     {% endif %}
 
 </div>
+
+<!-- JavaScript for Persistent Hiding -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let infoBox = document.getElementById("infoBox");
+
+        // Check if the info box should be hidden for this session
+        if (sessionStorage.getItem("hideInfoBox") === "true") {
+            infoBox.style.display = "none";
+        } else {
+            infoBox.style.display = "block";
+        }
+    });
+
+    document.getElementById("detectButton").addEventListener("click", function() {
+        let infoBox = document.getElementById("infoBox");
+
+        if (infoBox) {
+            infoBox.style.display = "none"; // Hide the info box
+            sessionStorage.setItem("hideInfoBox", "true"); // Hide for this session only
+        }
+    });
+</script>
+
+
+
+
+<!-- if needed open f12 console and type this -->
+<!-- "localStorage.removeItem("hideInfoBox")"";
+"location.reload();"" -->
+
+
+
+
+
 {% endblock %}
