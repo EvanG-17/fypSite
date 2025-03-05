@@ -32,7 +32,40 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- JavaScript -->
+    <!-- Cookie Policy Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <p>This website uses cookies to ensure you get the best experience. <a href="/privacy-policy">Learn more</a></p>
+        <button onclick="acceptCookies()">Accept</button>
+        <button onclick="declineCookies()">Decline</button>
+    </div>
+
+    <style>
+        .cookie-banner {
+        position: fixed;
+        bottom: 0;
+       left: 0;
+        width: 100%;
+       background-color: #333;
+       color: white;
+       text-align: center;
+       padding: 15px; 
+       display: none;
+        z-index: 1000; 
+      }
+
+      .content {
+    margin-bottom: 100px; /* Pushes content above the cookie banner */
+        }
+
+
+        .cookie-banner button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
     <script>
         function openDashboard() {
             document.getElementById("myDashboard").style.width = "250px";
@@ -40,6 +73,24 @@
         function closeDashboard() {
             document.getElementById("myDashboard").style.width = "0";
         }
+
+        function acceptCookies() {
+            document.cookie = "cookiesAccepted=true; path=/; max-age=31536000";
+            document.getElementById("cookieBanner").style.display = "none";
+        }
+
+        function declineCookies() {
+            document.cookie = "cookiesAccepted=false; path=/; max-age=31536000";
+            document.getElementById("cookieBanner").style.display = "none";
+        }
+
+        function checkCookies() {
+            if (!document.cookie.includes("cookiesAccepted=true")) {
+                document.getElementById("cookieBanner").style.display = "block";
+            }
+        }
+
+        window.onload = checkCookies;
     </script>
 </body>
 </html>

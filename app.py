@@ -93,6 +93,12 @@ def home():
 
     return render_template('home.html', uploaded_image=None, result=None, probability=None)
 
+ # App Route for privacy policy
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy.html')
+
+
 # Start Flask app
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Get Render-assigned port
