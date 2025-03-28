@@ -3,7 +3,18 @@
 {% block content %}
 <div style="text-align: center; margin-top: 50px;">
 
-    
+    <div class="top-bar">
+        <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
+        <span>My Website</span>
+        <a href="/login" class="auth-btn">Login / Sign Up</a>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeDashboard()">&times;</a>
+        <a href="/">Home</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <!-- Add more links as needed -->
+    </div>
 
     <!-- File Upload Form -->
     <form method="post" enctype="multipart/form-data">
@@ -55,17 +66,18 @@
             sessionStorage.setItem("hideInfoBox", "true"); // Hide for this session only
         }
     });
+
+    function openDashboard() {
+        document.getElementById("dashboard").style.width = "250px";
+    }
+
+    function closeDashboard() {
+        document.getElementById("dashboard").style.width = "0";
+    }
 </script>
 
-
-
-
 <!-- if needed open f12 console and type this -->
-<!-- "localStorage.removeItem("hideInfoBox")"";
-"location.reload();"" -->
-
-
-
-
+<!-- "localStorage.removeItem("hideInfoBox")""; -->
+<!-- "location.reload();"" -->
 
 {% endblock %}

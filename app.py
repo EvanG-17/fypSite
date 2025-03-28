@@ -98,9 +98,12 @@ def home():
 def privacy_policy():
     return render_template('privacy.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')  # Create a login.html template
 
 # Start Flask app
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Get Render-assigned port
+    port = int(os.environ.get("PORT", 5000))  # Change port as required as Github LFS decides it does not like my FILE
     app.run(host="0.0.0.0", port=port, debug=True)
 

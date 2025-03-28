@@ -1,19 +1,17 @@
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #FFFFF0;
 }
 .top-bar {
-    background-color: #333;
+    background-color: #36454F;
     color: white;
-    padding: 5px 15px;
     padding: 10px 20px;
     text-align: center;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
-    
 }
 .content {
     margin-top: 50px;
@@ -23,10 +21,10 @@ body {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1000;
+    z-index: 1100; 
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #415664;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -40,7 +38,7 @@ body {
     transition: 0.3s;
 }
 .dashboard a:hover {
-    background-color: #575757;
+    background-color: #36454F;
 }
 .dashboard .close-btn {
     position: absolute;
@@ -54,13 +52,12 @@ body {
 .open-btn {
     font-size: 20px;
     cursor: pointer;
-    background-color: #333;
+    background-color: #36454F;
     color: white;
     border: none;
     padding: 10px 15px;
     margin: 10px;
     transition: 0.3s;
-    
 }
 .open-btn:hover {
     background-color: #575757;
@@ -105,9 +102,6 @@ input[type="file"]::-webkit-file-upload-button:hover {
     display: none !important; /* Ensures it can be hidden */
 }
 
-
-
-
 .info-title {
     color: #007bff;
     font-size: 20px;
@@ -117,5 +111,22 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .info-text {
     font-size: 16px;
     color: #666;
+}
+
+.auth-btn {
+    float: right;
+    background-color: #27bdd7; /* Matches the existing button style */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: -5px; /* Adjust alignment */
+    transition: background-color 0.3s ease;
+}
+
+.auth-btn:hover {
+    background-color: #575757; /* Matches hover style */
 }
 
