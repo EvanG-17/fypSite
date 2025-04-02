@@ -127,6 +127,22 @@ input[type="file"]::-webkit-file-upload-button:hover {
 }
 
 .auth-btn:hover {
-    background-color: #575757; /* Matches hover style */
+    background-color: #575757;
 }
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
 

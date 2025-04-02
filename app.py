@@ -27,8 +27,7 @@ config = {
   'measurementId': "G-SLN4E8LJYN",
   'databaseURL': os.getenv("DATABASE_URL"),
 }
-print("Loaded Secret key:", os.getenv("SECRET_KEY"))
-print("Loaded DB URL:", os.getenv("DATABASE_URL"))
+
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
@@ -74,6 +73,18 @@ def signup():
             flash('Signup failed. Email may already be in use.')
             return redirect(url_for('signup'))
     return render_template('signup.html')
+
+@app.route('/delete_results', methods=['POST'])
+def delete_results():
+    if 'user' not in session:
+        return redirect(url_for('index'))
+
+    safe_email = session['user'].replace('.', '_')
+    firebase.database().child("results").child(safe_email).remove()
+
+    flash("All results deleted successfully.")
+    return redirect(url_for('results'))
+
 
 
 
