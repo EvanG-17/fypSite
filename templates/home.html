@@ -1,96 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    {% extends "base.html" %}
+{% extends "base.html" %}
 
-    {% block content %}
-    <div style="text-align: center; margin-top: 50px;">
+{% block content %}
+<div style="text-align: center; margin-top: 50px;">
 
-        {% if user_email %}
-            <p style="font-size: 20px; font-weight: bold;">Hi, {{ user_email }}!</p>
-        {% endif %}
+    {% if user_email %}
+        <p style="font-size: 20px; font-weight: bold;">Hi, {{ user_email }}!</p>
+    {% endif %}
 
-        <div class="top-bar">
-            <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
-            <span>Neural Network-Based Deepfake Detection</span>
-            <a href="/login" class="auth-btn">Login / Sign Up</a>
+    <!-- File Upload Form -->
+    <form method="post" enctype="multipart/form-data">
+        <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
+        <br><br>
+        <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3" style="width: 50%; margin: 0 auto;">
+        <button type="submit" class="btn btn-primary" id="detectButton">Detect</button>
+    </form>
+
+    {% if uploaded_image %}
+    <div style="margin-top: 30px; text-align: center;">
+        <h3>Uploaded Image:</h3>
+        <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
+             style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
+        
+        <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
+            Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
         </div>
+    </div>
+    {% endif %}
 
-        <div id="dashboard" class="dashboard">
-            <a href="javascript:void(0)" class="close-btn" onclick="closeDashboard()">&times;</a>
-            <a href="/">Home</a>
-            <a href="/privacy-policy">Privacy Policy</a>
-            <!-- Add more links as needed -->
-        </div>
-
-        <!-- File Upload Form -->
-        <form method="post" enctype="multipart/form-data">
-            <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
-            <br><br>
-            <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3" style="width: 50%; margin: 0 auto;">
-            <button type="submit" class="btn btn-primary" id="detectButton">Detect</button>
-        </form>
-
-        {% if uploaded_image %}
-        <div style="margin-top: 30px; text-align: center;">
-            <h3>Uploaded Image:</h3>
-            <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
-                 style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
-            
-            <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
-                Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Info Box -->
-        <div id="infoBox" class="info-box">
-            <h3 class="info-title">Instant, Free Deepfake Detection</h3>
-            <p class="info-text">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
-        </div>
-
+    <!-- Info Box -->
+    <div id="infoBox" class="info-box">
+        <h3 class="info-title">Instant, Free Deepfake Detection</h3>
+        <p class="info-text">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
     </div>
 
-    <!-- JavaScript for Persistent Hiding -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let infoBox = document.getElementById("infoBox");
+</div>
 
-            // Check if the info box should be hidden for this session
-            if (sessionStorage.getItem("hideInfoBox") === "true") {
-                infoBox.style.display = "none";
-            } else {
-                infoBox.style.display = "block";
-            }
-        });
-
-        document.getElementById("detectButton").addEventListener("click", function() {
-            let infoBox = document.getElementById("infoBox");
-
-            if (infoBox) {
-                infoBox.style.display = "none"; // Hide the info box
-                sessionStorage.setItem("hideInfoBox", "true"); // Hide for this session only
-            }
-        });
-
-        function openDashboard() {
-            document.getElementById("dashboard").style.width = "250px";
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let infoBox = document.getElementById("infoBox");
+        if (sessionStorage.getItem("hideInfoBox") === "true") {
+            infoBox.style.display = "none";
+        } else {
+            infoBox.style.display = "block";
         }
+    });
 
-        function closeDashboard() {
-            document.getElementById("dashboard").style.width = "0";
+    document.getElementById("detectButton").addEventListener("click", function() {
+        let infoBox = document.getElementById("infoBox");
+        if (infoBox) {
+            infoBox.style.display = "none";
+            sessionStorage.setItem("hideInfoBox", "true");
         }
-    </script>
-
-    <!-- if needed open f12 console and type this -->
-    <!-- "localStorage.removeItem("hideInfoBox")""; -->
-    <!-- "location.reload();"" -->
-
-    {% endblock %}
-</body>
-</html>
+    });
+</script>
+{% endblock %}

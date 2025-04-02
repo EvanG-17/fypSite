@@ -16,7 +16,16 @@
     <div class="top-bar">
         <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
         Neural Network-Based Deepfake Detection
+    
+        {% if user %}
+            <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
+        {% else %}
+            <a href="{{ url_for('index') }}" class="auth-btn">Login / Sign Up</a>
+        {% endif %}
     </div>
+    
+    
+    
     
     <!-- dashboard -->
     <div id="myDashboard" class="dashboard">

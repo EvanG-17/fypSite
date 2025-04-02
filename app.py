@@ -34,30 +34,31 @@ auth = firebase.auth()
 app.secret_key = os.getenv("SECRET_KEY")
 
 
-#Log in & Authentication section
 @app.route('/login', methods=['GET', 'POST'])
 def index():
-    if('user' in session):
-       return '''
-            Hi, {} <br><br>
-            <a href="/">🏠 Go to Home</a> <br>
-            <a href="/logout">🚪 Logout</a>
-        '''.format(session['user'])
+    if 'user' in session:
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             session['user'] = email
+            return redirect(url_for('home'))
         except:
             flash("Login failed. Please check your credentials.")
             return redirect(url_for('index'))
-    return render_template('login.html')
+
+    return render_template('login.html', user=session.get('user'))
+
+
 
 @app.route('/logout')
 def logout():
-    session.pop('user')
-    return redirect('/')
+    session.pop('user', None)
+    return redirect(url_for('index'))
+
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -72,8 +73,10 @@ def signup():
         except Exception as e:
             flash('Signup failed. Email may already be in use.')
             return redirect(url_for('signup'))
-    return render_template('signup.html')
+    return render_template('signup.html', user=session.get('user'))
 
+
+# Delete all results
 @app.route('/delete_results', methods=['POST'])
 def delete_results():
     if 'user' not in session:
@@ -160,13 +163,14 @@ def results():
                 "probability": data.get("probability")
             })
 
-    return render_template('results.html', results=results)
+    return render_template('results.html', results=results, user=user_email)
+
 
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    user_email = session.get('user')  # Get the logged-in user's email from the session
+    user_email = session.get('user')
 
     if request.method == 'POST':
         if 'fileUpload' not in request.files:
@@ -180,20 +184,19 @@ def home():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
 
-            # Open image for processing
             image = Image.open(filepath).convert("RGB")
-            image = transform(image).unsqueeze(0).to(device)  # Convert to tensor
-            
-            with torch.no_grad():  # No_grad as training is not being done
-                outputs = model(image)  # Get logits
-                probabilities = F.softmax(outputs, dim=1)  # Convert our logits to probabilities
-                deepfakeProbability = probabilities[0, 0].item()  # Get confidence score for Deepfake class
+            image = transform(image).unsqueeze(0).to(device)
 
-            confidence = round(deepfakeProbability * 100, 2)  # Convert to percentage
-            result = "Deepfake"  # Always say Deepfake but use score
+            with torch.no_grad():
+                outputs = model(image)
+                probabilities = F.softmax(outputs, dim=1)
+                deepfakeProbability = probabilities[0, 0].item()
+
+            confidence = round(deepfakeProbability * 100, 2)
+            result = "Deepfake"
 
             db = firebase.database()
-            safe_email = session['user'].replace('.', '_')
+            safe_email = user_email.replace('.', '_')
 
             entry = {
                 "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -204,9 +207,10 @@ def home():
 
             db.child("results").child(safe_email).push(entry)
 
-            return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence, user_email=user_email)
+            return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence, user_email=user_email, user=user_email)
 
-    return render_template('home.html', uploaded_image=None, result=None, probability=None, user_email=user_email)
+    return render_template('home.html', uploaded_image=None, result=None, probability=None, user_email=user_email, user=user_email)
+
 
  # App Route for privacy policy
 @app.route('/privacy-policy')
@@ -218,6 +222,11 @@ def privacy_policy():
 cred_path = os.getenv("FIREBASE_CREDENTIALS", "C:\\Users\\Evan\\Downloads\\egfyp-c5123-firebase-adminsdk-fbsvc-5479078bd9.json")
 cred = credentials.Certificate(cred_path)
 firebase_admin.initialize_app(cred)
+
+@app.context_processor
+def inject_user():
+    return dict(user=session.get('user'))
+
 
 # Start Flask app
 if __name__ == '__main__':
