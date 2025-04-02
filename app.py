@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pyrebase
+from dotenv import load_dotenv
 import os
 import torch
 import torch.nn as nn
@@ -13,6 +14,7 @@ from firebase_admin import credentials, auth, exceptions
 
 app = Flask(__name__)
 
+load_dotenv()
 
 config = {
   'apiKey': "AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg",
@@ -27,13 +29,14 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
-app.secret_key = 'secret' # Secret key for session management
+app.secret_key = os.getenv("SECRET_KEY")
+
 
 #Log in & Authentication section
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     if('user' in session):
-        return redirect(url_for('home'))  # 👈 Redirect if already logged in
+        return redirect(url_for('home')) 
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
