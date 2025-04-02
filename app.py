@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+import pyrebase
 import os
 import torch
 import torch.nn as nn
@@ -7,8 +8,53 @@ import torchvision.transforms as transforms
 from PIL import Image
 from timm import create_model  # Import timm for EfficientNet model
 import requests  # For downloading the model from Google Drive
+import firebase_admin
+from firebase_admin import credentials, auth, exceptions
 
 app = Flask(__name__)
+
+
+config = {
+  'apiKey': "AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg",
+  'authDomain': "evanfypworking.firebaseapp.com",
+  'projectId': "evanfypworking",
+  'storageBucket': "evanfypworking.firebasestorage.app",
+  'messagingSenderId': "413702763958",
+  'appId': "1:413702763958:web:e4411b617ab80442f3bd17",
+  'measurementId': "G-SLN4E8LJYN",
+  'databaseURL': "https://evanfypworking-default-rtdb.firebaseio.com/",
+}
+
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+app.secret_key = 'secret' # Secret key for session management
+
+#Log in & Authentication section
+@app.route('/login', methods=['GET', 'POST'])
+def index():
+    if('user' in session):
+        return redirect(url_for('home'))  # 👈 Redirect if already logged in
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+            session['user'] = email
+        except:
+            flash("Login failed. Please check your credentials.")
+            return redirect(url_for('index'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect('/')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    pass
+
 
 # Create upload folder and allow specific file extensions
 UPLOAD_FOLDER = 'static/uploads'
@@ -83,7 +129,6 @@ def home():
             with torch.no_grad():  # No_grad as training is not being done
                 outputs = model(image)  # Get logits
                 probabilities = F.softmax(outputs, dim=1)  # Convert our logits to probabilities
-                prediction = torch.argmax(outputs, dim=1).item() 
                 deepfakeProbability = probabilities[0, 0].item()  # Get confidence score for Deepfake class
 
             confidence = round(deepfakeProbability * 100, 2)  # Convert to percentage
@@ -98,9 +143,11 @@ def home():
 def privacy_policy():
     return render_template('privacy.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')  # Create a login.html template
+
+# Initialize Firebase Admin SDK
+cred_path = os.getenv("FIREBASE_CREDENTIALS", "C:\\Users\\Evan\\Downloads\\egfyp-c5123-firebase-adminsdk-fbsvc-5479078bd9.json")
+cred = credentials.Certificate(cred_path)
+firebase_admin.initialize_app(cred)
 
 # Start Flask app
 if __name__ == '__main__':
