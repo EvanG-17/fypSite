@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="content">
-        <h1>Sign Up</h1>
-        <form method="POST">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit" class="auth-btn">Sign Up</button>
-        </form>
-        <p>Already have an account? <a href="/login">Login</a></p>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-container">
+    <h2 class="login-title">Sign Up</h2>
+
+    <form method="POST">
+        <input type="email" name="email" placeholder="Email" class="login-input" required>
+        <input type="password" name="password" placeholder="Password" class="login-input" required>
+        <button type="submit" class="login-btn">Create Account</button>
+    </form>
+
+    <p class="signup-text">
+        Already have an account?
+        <a href="{{ url_for('index') }}">Log in here</a>
+    </p>
+</div>
+{% endblock %}
