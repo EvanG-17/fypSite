@@ -125,11 +125,19 @@ if not os.path.exists(MODEL_PATH):
     print("Downloading model from Google Drive...")
     download_model_from_gdrive(FILE_ID, MODEL_PATH)
 
-# Load the model
-model = create_model("efficientnet_b5", pretrained=False, num_classes=2)  # Ensure this is the same as the training setup
-model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
-model = model.to(device)
-model.eval()  # Switch to evaluation mode when using the model to predict
+# Load the model - Lazy loading / Only loading when needed
+# This is to avoid loading the model into memory until it's needed
+model = None 
+
+def load_model():
+    global model
+    if model is None:
+        print("Loading model into memory...")
+        model = create_model("efficientnet_b0", pretrained=False, num_classes=2)
+        model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+        model = model.to(device)
+        model.eval()
+
 
 # Make image same as training
 transform = transforms.Compose([
@@ -183,6 +191,9 @@ def home():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
 
+            # ✅ Lazy-load the model only when needed
+            load_model()
+
             image = Image.open(filepath).convert("RGB")
             image = transform(image).unsqueeze(0).to(device)
 
@@ -206,9 +217,24 @@ def home():
 
             db.child("results").child(safe_email).push(entry)
 
-            return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence, user_email=user_email, user=user_email)
+            return render_template(
+                'home.html',
+                uploaded_image=file.filename,
+                result=result,
+                probability=confidence,
+                user_email=user_email,
+                user=user_email
+            )
 
-    return render_template('home.html', uploaded_image=None, result=None, probability=None, user_email=user_email, user=user_email)
+    return render_template(
+        'home.html',
+        uploaded_image=None,
+        result=None,
+        probability=None,
+        user_email=user_email,
+        user=user_email
+    )
+
 
 
  # App Route for privacy policy
