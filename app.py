@@ -124,18 +124,13 @@ if not os.path.exists(MODEL_PATH):
     print("Downloading model from Google Drive...")
     download_model_from_gdrive(FILE_ID, MODEL_PATH)
 
-# Load the model - Lazy loading / Only loading when needed
-# This is to avoid loading the model into memory until it's needed
-model = None 
-
-def load_model():
-    global model
-    if model is None:
-        print("Loading model into memory...")
-        model = create_model("efficientnet_b5", pretrained=False, num_classes=2)
-        model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
-        model = model.to(device)
-        model.eval()
+# ✅ Load the model at app startup
+print("Loading model into memory...")
+model = create_model("efficientnet_b5", pretrained=False, num_classes=2)
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+model = model.to(device)
+model.eval()
+print("Model loaded and ready.")
 
 
 # Make image same as training
@@ -190,10 +185,8 @@ def home():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
 
-            # ✅ Lazy-load the model only when needed
-            load_model()
-
             image = Image.open(filepath).convert("RGB")
+
             image = transform(image).unsqueeze(0).to(device)
 
             with torch.no_grad():
@@ -204,7 +197,7 @@ def home():
             confidence = round(deepfakeProbability * 100, 2)
             result = "Deepfake"
 
-            # ✅ Only save results if logged in
+            # Only save results if logged in
             if user_email:
                 safe_email = user_email.replace('.', '_')
                 db = firebase.database()
