@@ -133,7 +133,7 @@ def load_model():
     global model
     if model is None:
         print("Loading model into memory...")
-        model = create_model("efficientnet_b0", pretrained=False, num_classes=2)
+        model = create_model("efficientnet_b5", pretrained=False, num_classes=2)
         model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
         model = model.to(device)
         model.eval()
@@ -205,24 +205,23 @@ def home():
             confidence = round(deepfakeProbability * 100, 2)
             result = "Deepfake"
 
-            db = firebase.database()
-            safe_email = user_email.replace('.', '_')
-
-            entry = {
-                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "image": file.filename,
-                "label": result,
-                "probability": confidence
-            }
-
-            db.child("results").child(safe_email).push(entry)
+            # ✅ Only save results if logged in
+            if user_email:
+                safe_email = user_email.replace('.', '_')
+                db = firebase.database()
+                entry = {
+                    "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "image": file.filename,
+                    "label": result,
+                    "probability": confidence
+                }
+                db.child("results").child(safe_email).push(entry)
 
             return render_template(
                 'home.html',
                 uploaded_image=file.filename,
                 result=result,
                 probability=confidence,
-                user_email=user_email,
                 user=user_email
             )
 
@@ -231,9 +230,9 @@ def home():
         uploaded_image=None,
         result=None,
         probability=None,
-        user_email=user_email,
         user=user_email
     )
+
 
 
 
