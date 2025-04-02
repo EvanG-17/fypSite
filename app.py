@@ -10,8 +10,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from timm import create_model  # Import timm for EfficientNet model
 import requests  # For downloading the model from Google Drive
-import firebase_admin
-from firebase_admin import credentials, auth, exceptions
+from firebase_admin import auth
 
 app = Flask(__name__)
 
@@ -242,11 +241,6 @@ def privacy_policy():
     return render_template('privacy.html')
 
 
-# Initialize Firebase Admin SDK
-cred_path = os.getenv("FIREBASE_CREDENTIALS", "C:\\Users\\Evan\\Downloads\\egfyp-c5123-firebase-adminsdk-fbsvc-5479078bd9.json")
-cred = credentials.Certificate(cred_path)
-firebase_admin.initialize_app(cred)
-
 @app.context_processor
 def inject_user():
     return dict(user=session.get('user'))
@@ -255,5 +249,5 @@ def inject_user():
 # Start Flask app
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Change port as required as Github LFS decides it does not like my FILE
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
 
