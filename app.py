@@ -25,8 +25,10 @@ config = {
   'messagingSenderId': "413702763958",
   'appId': "1:413702763958:web:e4411b617ab80442f3bd17",
   'measurementId': "G-SLN4E8LJYN",
-  'databaseURL': "https://evanfypworking-default-rtdb.europe-west1.firebasedatabase.app/",
+  'databaseURL': os.getenv("DATABASE_URL"),
 }
+print("Loaded Secret key:", os.getenv("SECRET_KEY"))
+print("Loaded DB URL:", os.getenv("DATABASE_URL"))
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
