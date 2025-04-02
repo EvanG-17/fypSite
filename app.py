@@ -163,8 +163,7 @@ def results():
                 "probability": data.get("probability")
             })
 
-    return render_template('results.html', results=results, user=user_email)
-
+    return render_template('results.html', results=results)
 
 
 

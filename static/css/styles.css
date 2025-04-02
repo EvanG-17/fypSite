@@ -275,6 +275,61 @@ td img {
 }
 
 
+.top-bar {
+    background-color: #36454F;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-bar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.top-bar-left,
+.top-bar-center,
+.top-bar-right {
+    display: flex;
+    align-items: center;
+}
+
+.top-bar-left {
+    flex: 1;
+    gap: 10px;
+}
+
+.top-bar-center {
+    flex: 1;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+
+.top-bar-right {
+    flex: 1;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.user-greeting-left {
+    color: white;
+    font-size: 16px;
+}
+
+
+
+
+
 
 
 

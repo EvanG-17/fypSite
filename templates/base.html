@@ -14,15 +14,28 @@
 <body>
     <!-- top bar -->
     <div class="top-bar">
-        <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
-        Neural Network-Based Deepfake Detection
+        <div class="top-bar-inner">
+            <div class="top-bar-left">
+                <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
+            </div>
     
-        {% if user %}
-            <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
-        {% else %}
-            <a href="{{ url_for('index') }}" class="auth-btn">Login / Sign Up</a>
-        {% endif %}
+            <div class="top-bar-center">
+                Neural Network-Based Deepfake Detection
+            </div>
+    
+            <div class="top-bar-right">
+                {% if user %}
+                    <span class="user-greeting-left">Hi, {{ user }}!</span>
+                    <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('index') }}" class="auth-btn">Login / Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
+    
+    
+    
     
     
     
