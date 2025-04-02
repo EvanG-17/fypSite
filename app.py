@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pyrebase
+from datetime import datetime
 from dotenv import load_dotenv
 import os
 import torch
@@ -24,7 +25,7 @@ config = {
   'messagingSenderId': "413702763958",
   'appId': "1:413702763958:web:e4411b617ab80442f3bd17",
   'measurementId': "G-SLN4E8LJYN",
-  'databaseURL': "https://evanfypworking-default-rtdb.firebaseio.com/",
+  'databaseURL': "https://evanfypworking-default-rtdb.europe-west1.firebasedatabase.app/",
 }
 
 firebase = pyrebase.initialize_app(config)
@@ -128,7 +129,26 @@ def allowed_file(filename):
 
 @app.route('/results')
 def results():
-    return render_template('results.html')
+    if 'user' not in session:
+        return redirect(url_for('index'))
+
+    user_email = session['user']
+    safe_email = user_email.replace('.', '_')
+    firebase_data = firebase.database().child("results").child(safe_email).get()
+
+    results = []
+    if firebase_data.each():
+        for item in firebase_data.each():
+            data = item.val()
+            results.append({
+                "date": data.get("date"),
+                "image": data.get("image"),
+                "label": data.get("label"),
+                "probability": data.get("probability")
+            })
+
+    return render_template('results.html', results=results)
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -158,6 +178,18 @@ def home():
 
             confidence = round(deepfakeProbability * 100, 2)  # Convert to percentage
             result = "Deepfake"  # Always say Deepfake but use score
+
+            db = firebase.database()
+            safe_email = session['user'].replace('.', '_')
+
+            entry = {
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "image": file.filename,
+                "label": result,
+                "probability": confidence
+            }
+
+            db.child("results").child(safe_email).push(entry)
 
             return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence, user_email=user_email)
 
