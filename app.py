@@ -115,6 +115,11 @@ transform = transforms.Compose([
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/results')
+def results():
+    return render_template('results.html')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     user_email = session.get('user')  # Get the logged-in user's email from the session
