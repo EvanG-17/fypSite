@@ -36,7 +36,11 @@ app.secret_key = os.getenv("SECRET_KEY")
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     if('user' in session):
-        return redirect(url_for('home')) 
+       return '''
+            Hi, {} <br><br>
+            <a href="/">🏠 Go to Home</a> <br>
+            <a href="/logout">🚪 Logout</a>
+        '''.format(session['user'])
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -113,6 +117,8 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    user_email = session.get('user')  # Get the logged-in user's email from the session
+
     if request.method == 'POST':
         if 'fileUpload' not in request.files:
             return redirect(request.url)
@@ -137,9 +143,9 @@ def home():
             confidence = round(deepfakeProbability * 100, 2)  # Convert to percentage
             result = "Deepfake"  # Always say Deepfake but use score
 
-            return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence)
+            return render_template('home.html', uploaded_image=file.filename, result=result, probability=confidence, user_email=user_email)
 
-    return render_template('home.html', uploaded_image=None, result=None, probability=None)
+    return render_template('home.html', uploaded_image=None, result=None, probability=None, user_email=user_email)
 
  # App Route for privacy policy
 @app.route('/privacy-policy')
