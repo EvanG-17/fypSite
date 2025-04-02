@@ -60,7 +60,18 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    pass
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            user = auth.create_user_with_email_and_password(email, password)
+            flash('Account created successfully! Please log in.')
+            return redirect(url_for('index'))
+        except Exception as e:
+            flash('Signup failed. Email may already be in use.')
+            return redirect(url_for('signup'))
+    return render_template('signup.html')
+
 
 
 # Create upload folder and allow specific file extensions

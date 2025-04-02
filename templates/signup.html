@@ -18,13 +18,3 @@
     </div>
 </body>
 </html>
-
-from functools import wraps
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        # Add logic to check if the user is authenticated
-        # For example, check session or Firebase token
-        return f(*args, **kwargs)
-    return decorated_function
