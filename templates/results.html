@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Image</th>
+            <th>Probability</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.date }}</td>
+            <td><img src="{{ url_for('static', filename='uploads/' + result.image) }}" width="100"></td>
+            <td>{{ result.probability }}%</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">No results found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="text-align: center; margin-top: 20px;">
+    <form action="{{ url_for('delete_results') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete all your results?');">
+        <button type="submit" class="delete-btn">Delete All Results</button>
+    </form>
+</div>
+{% endblock %}
