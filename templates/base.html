@@ -10,6 +10,8 @@
 
     <!-- stylesheet for dashboard, using bootstrap -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+
 </head>
 <body>
     <!-- top bar -->
@@ -34,23 +36,18 @@
         </div>
     </div>
     
-    
-    
-    
-    
-    
-    
     <!-- dashboard -->
     <div id="myDashboard" class="dashboard">
         <a href="javascript:void(0)" class="close-btn" onclick="closeDashboard()">&times;</a>
         <a href="{{ url_for('home') }}">Home</a>
+        {% if user %}
         <a href="{{ url_for('results') }}">Previous Results</a>
+        {% endif %}
         <a href="https://www.setu.ie/" target="_blank">SETU</a>
         <a href="https://evang-17.github.io/fypExpoSite/" target="_blank">About This App</a>
-        <a href="#">Settings</a>
+        <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
     </div>
     
-
     <!-- content -->
     <div class="content">
         {% block content %}{% endblock %}
@@ -58,44 +55,20 @@
 
     <!-- Cookie Policy Banner -->
     <div id="cookieBanner" class="cookie-banner">
-        <p>This website uses cookies to ensure you get the best experience. <a href="/privacy-policy">Learn more</a></p>
+        <p>This website uses cookies to ensure you get the best experience. <a href="/privacy-policy" style="color: #0275d8;">Learn more</a></p>
         <button onclick="acceptCookies()">Accept</button>
         <button onclick="declineCookies()">Decline</button>
     </div>
 
-    <style>
-        .cookie-banner {
-        position: fixed;
-        bottom: 0;
-       left: 0;
-        width: 100%;
-       background-color: #333;
-       color: white;
-       text-align: center;
-       padding: 15px; 
-       display: none;
-        z-index: 1000; 
-      }
-
-      .content {
-    margin-bottom: 100px; /* Pushes content above the cookie banner */
-        }
-
-
-        .cookie-banner button {
-            margin-left: 10px;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
-
     <script>
         function openDashboard() {
             document.getElementById("myDashboard").style.width = "250px";
+            document.getElementsByClassName("content")[0].style.marginLeft = "250px";
         }
+        
         function closeDashboard() {
             document.getElementById("myDashboard").style.width = "0";
+            document.getElementsByClassName("content")[0].style.marginLeft = "0";
         }
 
         function acceptCookies() {
@@ -109,7 +82,8 @@
         }
 
         function checkCookies() {
-            if (!document.cookie.includes("cookiesAccepted=true")) {
+            if (!document.cookie.includes("cookiesAccepted=true") && 
+                !document.cookie.includes("cookiesAccepted=false")) {
                 document.getElementById("cookieBanner").style.display = "block";
             }
         }

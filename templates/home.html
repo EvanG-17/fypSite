@@ -1,41 +1,96 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align: center; margin-top: 50px;">
-
-    
+<div style="text-align: center; margin-top: 50px; background-color: #fffef0; padding-bottom: 50px;">
 
     <!-- File Upload Form -->
     <form method="post" enctype="multipart/form-data">
-        <label for="fileUpload" style="font-size: 18px;">Upload a Video or Image:</label>
+        <label for="fileUpload" style="font-size: 18px; color: #222;">Upload a Video or Image:</label>
         <br><br>
-        <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3" style="width: 50%; margin: 0 auto;">
-        <button type="submit" class="btn btn-primary" id="detectButton">Detect</button>
+        <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3"
+               style="width: 50%; margin: 0 auto; background-color: #ffffff; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+        <button type="submit" class="btn btn-primary" id="detectButton"
+                style="margin-top: 15px; padding: 8px 20px;">Detect</button>
     </form>
 
     {% if uploaded_image %}
-    <div style="margin-top: 30px; text-align: center;">
-        <h3>Uploaded Image:</h3>
-        <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
-             style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px;">
-        
-        <div style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eccfcf; display: block; max-width: 50%; margin: 0 auto;">
-            Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
+    <div style="margin-top: 30px;">
+        <h3 style="color: #222;">Uploaded Image:</h3>
+        <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}"
+             style="width: 500px; height: auto; border: 1px solid #ccc; padding: 10px; background: #f9f9f9;">
+
+        <!-- Circular Progress Container -->
+        <div id="progress-wrapper" style="width: 150px; height: 150px; margin: 30px auto; position: relative;">
+            <div id="progress-container"
+                 data-probability="{{ probability }}"
+                 data-result="{{ result }}"
+                 style="width: 100%; height: 100%;"></div>
         </div>
+
+        <p style="font-size: 18px; color: #222;">
+            Your image is <strong>{{ probability }}%</strong> likely to be a <strong>{{ result }}</strong>.
+        </p>
     </div>
+
+    <!-- Load progressbar.js -->
+    <script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.0.0/dist/progressbar.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('progress-container');
+            const probability = parseFloat(container.dataset.probability) || 0;
+            const result = container.dataset.result;
+
+            const resultColor = result === 'Deepfake' ? '#FF5252' : '#4CAF50';
+
+            const bar = new ProgressBar.Circle(container, {
+                color: resultColor,
+                strokeWidth: 6,
+                trailWidth: 2,
+                trailColor: '#eee',
+                easing: 'easeInOut',
+                duration: 1400,
+                text: {
+                    autoStyleContainer: false
+                },
+                from: { color: '#aaa', width: 2 },
+                to: { color: resultColor, width: 6 },
+                step: function(state, circle) {
+                    circle.path.setAttribute('stroke', state.color);
+                    circle.path.setAttribute('stroke-width', state.width);
+                    
+                    const value = Math.round(circle.value() * 100);
+                    circle.setText(value + '%');
+                }
+            });
+
+            bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+            bar.text.style.fontSize = '1.5rem';
+            bar.text.style.position = 'absolute';
+            bar.text.style.top = '50%';
+            bar.text.style.left = '50%';
+            bar.text.style.transform = 'translate(-50%, -50%)';
+            bar.text.style.color = result === 'Deepfake' ? '#FF5252' : '#4CAF50';
+            bar.text.style.color = resultColor;
+
+            bar.animate(probability / 100, {
+                from: { color: '#aaa', width: 2 },
+                to: { color: resultColor, width: 6 }
+            });
+        });
+    </script>
     {% endif %}
 
     <!-- Info Box -->
-    <div id="infoBox" class="info-box">
-        <h3 class="info-title">Instant, Free Deepfake Detection</h3>
-        <p class="info-text">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
+    <div id="infoBox" class="info-box" style="background-color: #f9f9f9;">
+        <h3 class="info-title" style="color: #333;">Instant, Free Deepfake Detection</h3>
+        <p class="info-text" style="color: #666;">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
     </div>
-
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let infoBox = document.getElementById("infoBox");
+    document.addEventListener("DOMContentLoaded", function () {
+        const infoBox = document.getElementById("infoBox");
         if (sessionStorage.getItem("hideInfoBox") === "true") {
             infoBox.style.display = "none";
         } else {
@@ -43,8 +98,8 @@
         }
     });
 
-    document.getElementById("detectButton").addEventListener("click", function() {
-        let infoBox = document.getElementById("infoBox");
+    document.getElementById("detectButton").addEventListener("click", function () {
+        const infoBox = document.getElementById("infoBox");
         if (infoBox) {
             infoBox.style.display = "none";
             sessionStorage.setItem("hideInfoBox", "true");

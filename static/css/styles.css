@@ -327,6 +327,34 @@ td img {
 }
 
 
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px; 
+    display: none;
+    z-index: 1000; 
+}
+
+.cookie-banner button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #0275d8;
+    color: white;
+    border-radius: 4px;
+}
+
+.cookie-banner button:hover {
+    background-color: #0056b3;
+}
+
+
 
 
 

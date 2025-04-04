@@ -186,7 +186,6 @@ def home():
             file.save(filepath)
 
             image = Image.open(filepath).convert("RGB")
-
             image = transform(image).unsqueeze(0).to(device)
 
             with torch.no_grad():
@@ -195,7 +194,9 @@ def home():
                 deepfakeProbability = probabilities[0, 0].item()
 
             confidence = round(deepfakeProbability * 100, 2)
-            result = "Deepfake"
+            
+            # Set result based on 30% threshold
+            result = "Deepfake" if confidence > 30 else "Real"
 
             # Only save results if logged in
             if user_email:
