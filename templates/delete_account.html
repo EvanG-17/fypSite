@@ -32,7 +32,7 @@
 
         try {
             await deleteUser(user);
-            alert("Your account has been successfully deleted.");
+            // alert("Your account has been successfully deleted.");
             window.location.href = "{{ url_for('logout') }}";  // Logs out and clears session
         } catch (error) {
             if (error.code === "auth/requires-recent-login") {
