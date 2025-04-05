@@ -50,7 +50,7 @@
             const user = userCredential.user;
 
             await deleteUser(user);
-            alert("Your account has been successfully deleted.");
+            // alert("Your account has been successfully deleted.");
             window.location.href = "{{ url_for('logout') }}";
         } catch (error) {
             alert("Error: " + error.message);

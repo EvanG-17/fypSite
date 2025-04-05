@@ -486,7 +486,7 @@ td img {
     justify-content: center;
     font-weight: bold;
     cursor: pointer;
-    border: 2px solid white; /* Add this for bold border */
+    border: 2px solid white;
 }
 
 .dropdown-menu {
