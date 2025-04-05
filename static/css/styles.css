@@ -415,6 +415,17 @@ td img {
     background-color: #1ca0b8;
 }
 
+/* Failed login message */
+.flash-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+    font-size: 15px;
+}
+
 
 
 

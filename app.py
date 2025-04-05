@@ -46,7 +46,7 @@ def index():
             session['user'] = email
             return redirect(url_for('home'))
         except:
-            flash("Login failed. Please check your credentials.")
+            flash("Login failed. Please double-check your Username and Password.")
             return redirect(url_for('index'))
 
     return render_template('login.html', user=session.get('user'))

@@ -4,6 +4,17 @@
 <div class="login-container">
     <h2 class="login-title">Login</h2>
 
+    <!-- Flash message for login failure -->
+    {% with login_flash = get_flashed_messages() %}
+        {% if login_flash %}
+            <div class="flash-message">
+            {{ login_flash[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <!-- Login Form -->
     <form method="POST">
         <input type="email" name="email" placeholder="Email" class="login-input" required>
         <input type="password" name="password" placeholder="Password" class="login-input" required>
