@@ -43,13 +43,22 @@ def index():
         password = request.form['password']
         try:
             user = auth.sign_in_with_email_and_password(email, password)
+            user_info = auth.get_account_info(user['idToken'])
+            email_verified = user_info['users'][0]['emailVerified']
+
+            if not email_verified:
+                flash("Please verify your email before logging in.")
+                return redirect(url_for('index'))
+
             session['user'] = email
             return redirect(url_for('home'))
+
         except:
             flash("Login failed. Please double-check your Username and Password.")
             return redirect(url_for('index'))
 
     return render_template('login.html', user=session.get('user'))
+
 
 
 
@@ -67,12 +76,22 @@ def signup():
         password = request.form['password']
         try:
             user = auth.create_user_with_email_and_password(email, password)
-            flash('Account created successfully! Please log in.')
+
+            id_token = user['idToken']
+            requests.post(
+                "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + config['apiKey'],
+                json={"requestType": "VERIFY_EMAIL", "idToken": id_token}
+            )
+
+            flash('Account created! Please check your email to verify before logging in.')
             return redirect(url_for('index'))
+
         except Exception as e:
             flash('Signup failed. Email may already be in use.')
             return redirect(url_for('signup'))
+
     return render_template('signup.html', user=session.get('user'))
+
 
 
 # Delete all results
