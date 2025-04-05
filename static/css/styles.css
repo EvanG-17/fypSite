@@ -354,6 +354,71 @@ td img {
     background-color: #0056b3;
 }
 
+/* Deepfake facts styling */
+
+.deepfake-facts {
+    background-color: #36454F;
+    color: #f8f9fa;
+    padding: 25px 40px;
+    margin: 250px auto 0;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+}
+
+.facts-heading {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #00d3ff;
+}
+
+.deepfake-facts p {
+    font-size: 18px;
+    margin: 0;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.deepfake-facts p.fade-in {
+    opacity: 1;
+    transform: scale(1);
+    animation: fadeScale 0.6s ease forwards;
+}
+
+@keyframes fadeScale {
+  0%   { opacity: 0; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+
+.fact-controls {
+    margin-top: 15px;
+}
+
+.fact-btn {
+    background-color: #27bdd7;
+    border: none;
+    padding: 8px 16px;
+    color: white;
+    font-size: 18px;
+    margin: 0 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fact-btn:hover {
+    background-color: #1ca0b8;
+}
+
+
+
+
+
 
 
 

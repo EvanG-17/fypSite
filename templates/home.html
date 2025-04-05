@@ -5,7 +5,7 @@
 
     <!-- File Upload Form -->
     <form method="post" enctype="multipart/form-data">
-        <label for="fileUpload" style="font-size: 18px; color: #222;">Upload a Video or Image:</label>
+        <label for="fileUpload" style="font-size: 18px; color: #222;">Supports: PNG, JPG, JPEG, GIF & WEBP</label>
         <br><br>
         <input type="file" id="fileUpload" name="fileUpload" class="form-control mb-3"
                style="width: 50%; margin: 0 auto; background-color: #ffffff; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
@@ -81,12 +81,69 @@
     </script>
     {% endif %}
 
-    <!-- Info Box -->
-    <div id="infoBox" class="info-box" style="background-color: #f9f9f9;">
-        <h3 class="info-title" style="color: #333;">Instant, Free Deepfake Detection</h3>
-        <p class="info-text" style="color: #666;">Supports: PNG, JPG, JPEG, GIF & WEBP</p>
-    </div>
-</div>
+
+    <div class="deepfake-facts">
+        <h4 class="facts-heading">Did you know?</h4>
+        <p id="fact-text">Deepfake fact will appear here...</p>
+    
+        <div class="fact-controls">
+            <button id="prev-fact" class="fact-btn">⟵</button>
+            <button id="next-fact" class="fact-btn">⟶</button>
+        </div>
+    </div>    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const facts = [
+                "60% of consumers have encountered a deepfake video within the last year.",
+                "Human detection of deepfake images averages 62% accuracy.",
+                "Deepfake fraud attempts surged by 3,000% in 2024.",
+                "Deepfake-related fraud costs businesses nearly $500,000 on average.",
+                "DeepFaceLab is used for over 95% of all deepfake videos.",
+                "1 in 4 business leaders are unfamiliar with deepfakes.",
+                "10x increase in deepfakes detected globally across all industries in 2024.",
+                "Generative AI fraud losses could reach US$40 billion by 2027."
+            ];
+    
+            let currentFactIndex = 0;
+            let factText = document.getElementById("fact-text");
+            const nextBtn = document.getElementById("next-fact");
+            const prevBtn = document.getElementById("prev-fact");
+    
+            function showNextFact(index) {
+                factText.classList.remove("fade-in");
+                requestAnimationFrame(() => {
+                    factText.textContent = facts[index];
+                    requestAnimationFrame(() => {
+                        factText.classList.add("fade-in");
+        });
+    });
+}
+
+
+
+    
+            function rotateFactAuto() {
+                currentFactIndex = (currentFactIndex + 1) % facts.length;
+                showNextFact(currentFactIndex);
+            }
+    
+            nextBtn.addEventListener("click", function () {
+                currentFactIndex = (currentFactIndex + 1) % facts.length;
+                showNextFact(currentFactIndex);
+            });
+    
+            prevBtn.addEventListener("click", function () {
+                currentFactIndex = (currentFactIndex - 1 + facts.length) % facts.length;
+                showNextFact(currentFactIndex);
+            });
+    
+            showNextFact(currentFactIndex);
+            setInterval(rotateFactAuto, 8000);
+        });
+    </script>
+    
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -106,4 +163,11 @@
         }
     });
 </script>
+
+
+
+<footer style="margin-top: 100px; text-align: center; font-size: 14px; color: #777;">
+    © 2025 DeepFake Detector | Created by Evan Geary as a Final Year Project @ SETU
+</footer>
+
 {% endblock %}
