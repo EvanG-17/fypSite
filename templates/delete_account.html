@@ -4,57 +4,43 @@
 <div class="login-container">
     <h2 class="login-title">Delete Account</h2>
     <p style="margin-bottom: 20px;">
-        Are you sure you want to delete your account? This action cannot be undone.
+        Are you sure you want to delete your account? This action <strong>cannot</strong> be undone.
     </p>
-
-    <div>
-        <input type="email" id="reAuthEmail" placeholder="Re-enter your email" class="login-input" required>
-        <input type="password" id="reAuthPassword" placeholder="Re-enter your password" class="login-input" required>
-    </div>
-
     <button onclick="handleAccountDeletion()" class="delete-btn">Yes, Delete My Account</button>
 </div>
 
+<!-- Firebase Deletion Script -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {
-        getAuth,
-        signInWithEmailAndPassword,
-        deleteUser
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, deleteUser } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg",
         authDomain: "evanfypworking.firebaseapp.com",
-        projectId: "evanfypworking",
-        storageBucket: "evanfypworking.appspot.com",
-        messagingSenderId: "413702763958",
-        appId: "1:413702763958:web:e4411b617ab80442f3bd17",
-        measurementId: "G-SLN4E8LJYN"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     window.handleAccountDeletion = async function () {
-        const email = document.getElementById("reAuthEmail").value.trim();
-        const password = document.getElementById("reAuthPassword").value.trim();
+        const user = auth.currentUser;
 
-        if (!email || !password) {
-            alert("Please enter your email and password to confirm.");
+        if (!user) {
+            alert("User not authenticated. Please log in again.");
             return;
         }
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
             await deleteUser(user);
-            // alert("Your account has been successfully deleted.");
-            window.location.href = "{{ url_for('logout') }}";
+            alert("Your account has been successfully deleted.");
+            window.location.href = "{{ url_for('logout') }}";  // Logs out and clears session
         } catch (error) {
-            alert("Error: " + error.message);
+            if (error.code === "auth/requires-recent-login") {
+                alert("Please log in again to delete your account.");
+            } else {
+                alert("Error deleting account: " + error.message);
+            }
         }
-    };
+    }
 </script>
 {% endblock %}

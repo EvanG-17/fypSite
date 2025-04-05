@@ -512,6 +512,22 @@ td img {
 }
 
 
+.google-btn {
+    background-color: #db4437;
+    color: white;
+    margin-top: 15px;
+    font-weight: 600;
+    font-family: "Segoe UI", sans-serif;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.google-btn:hover {
+    background-color: #c1351d;
+}
+
+
+
 
 
 

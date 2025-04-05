@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import pyrebase
 from datetime import datetime
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from timm import create_model  # Import timm for EfficientNet model
 import requests  # For downloading the model from Google Drive
-from firebase_admin import auth
+from firebase_admin import auth, credentials
 
 app = Flask(__name__)
 
@@ -252,6 +252,33 @@ def delete_account_page():
     if 'user' not in session:
         return redirect(url_for('index'))
     return render_template('delete_account.html')
+
+
+@app.route('/google-login', methods=['POST'])
+def google_login():
+    data = request.get_json()
+    id_token = data.get('idToken')
+
+    if not id_token:
+        return jsonify({"error": "Missing ID token"}), 400
+
+    url = f"https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={"AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg"}"
+    response = requests.post(url, json={"idToken": id_token})
+
+    if response.status_code == 200:
+        user_info = response.json()
+        email = user_info['users'][0].get('email')
+
+        if email:
+            session['user'] = email
+            return jsonify({"message": "Login successful"}), 200
+        else:
+            return jsonify({"error": "Email missing"}), 400
+    else:
+        return jsonify({"error": "Invalid token or request"}), 401
+
+
+
 
 
 

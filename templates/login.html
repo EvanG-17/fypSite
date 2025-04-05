@@ -20,6 +20,9 @@
         <button type="submit" class="login-btn">Login</button>
     </form>
 
+    <!-- Google Sign-In -->
+    <button id="google-login" class="login-btn google-btn" type="button">Continue with Google</button>
+
     <p class="signup-text">
         Don’t have an account?
         <a href="{{ url_for('signup') }}">Sign up here</a>
@@ -29,7 +32,7 @@
         <a href="#" onclick="showPasswordReset()">Forgot your password?</a>
     </p>
 
-    <!-- Hidden Password Reset Section -->
+    <!-- Password Reset Section -->
     <div id="reset-container" style="display: none; margin-top: 20px;">
         <input type="email" id="resetEmail" placeholder="Enter your email" class="login-input" required>
         <button type="button" onclick="resetPassword()" class="login-btn" style="margin-top: 10px;">Reset Password</button>
@@ -37,10 +40,10 @@
     </div>
 </div>
 
-<!-- Firebase Password Reset Script -->
+<!-- Firebase Scripts -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getAuth, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg",
@@ -50,6 +53,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Password reset logic
     window.resetPassword = function () {
         const email = document.getElementById("resetEmail").value;
         const message = document.getElementById("resetMessage");
@@ -68,5 +72,33 @@
     window.showPasswordReset = function () {
         document.getElementById("reset-container").style.display = "block";
     };
+
+    // Google Sign-In
+    const provider = new GoogleAuthProvider();
+    const googleBtn = document.getElementById("google-login");
+
+    googleBtn.addEventListener("click", async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
+
+            const response = await fetch("/google-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idToken })
+            });
+
+            if (response.ok) {
+                window.location.href = "/";
+            } else {
+                const data = await response.json();
+                alert("Google sign-in failed: " + data.error);
+            }
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+    });
 </script>
 {% endblock %}
