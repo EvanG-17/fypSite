@@ -247,6 +247,16 @@ def home():
 
 
 
+@app.route('/account/delete')
+def delete_account_page():
+    if 'user' not in session:
+        return redirect(url_for('index'))
+    return render_template('delete_account.html')
+
+
+
+
+
 
  # App Route for privacy policy
 @app.route('/privacy-policy')
