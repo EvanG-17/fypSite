@@ -8,11 +8,10 @@
     {% with login_flash = get_flashed_messages() %}
         {% if login_flash %}
             <div class="flash-message">
-            {{ login_flash[0] }}
+                {{ login_flash[0] }}
             </div>
         {% endif %}
     {% endwith %}
-
 
     <!-- Login Form -->
     <form method="POST">
@@ -25,5 +24,49 @@
         Don’t have an account?
         <a href="{{ url_for('signup') }}">Sign up here</a>
     </p>
+
+    <p style="margin-top: 10px;">
+        <a href="#" onclick="showPasswordReset()">Forgot your password?</a>
+    </p>
+
+    <!-- Hidden Password Reset Section -->
+    <div id="reset-container" style="display: none; margin-top: 20px;">
+        <input type="email" id="resetEmail" placeholder="Enter your email" class="login-input" required>
+        <button type="button" onclick="resetPassword()" class="login-btn" style="margin-top: 10px;">Reset Password</button>
+        <p id="resetMessage" style="margin-top: 10px; font-size: 14px;"></p>
+    </div>
 </div>
+
+<!-- Firebase Password Reset Script -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg",
+        authDomain: "evanfypworking.firebaseapp.com",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.resetPassword = function () {
+        const email = document.getElementById("resetEmail").value;
+        const message = document.getElementById("resetMessage");
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                message.style.color = "green";
+                message.innerText = "Password reset email sent!";
+            })
+            .catch((error) => {
+                message.style.color = "red";
+                message.innerText = error.message;
+            });
+    };
+
+    window.showPasswordReset = function () {
+        document.getElementById("reset-container").style.display = "block";
+    };
+</script>
 {% endblock %}
