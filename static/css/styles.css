@@ -427,6 +427,94 @@ td img {
 }
 
 
+/* Avatar styling */
+
+.avatar-menu {
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    z-index: 999;
+    width: 160px;
+    right: 0;
+    top: 50px;
+}
+
+.avatar-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.avatar-menu a:hover {
+    background-color: #f7f7f7;
+    color: #000;
+}
+
+.avatar-menu::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    border-width: 0 8px 10px 8px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar {
+    background-color: #27bdd7;
+    color: white;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid white; /* Add this for bold border */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.dropdown-menu a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+
+
+
+
 
 
 

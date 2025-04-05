@@ -10,8 +10,6 @@
 
     <!-- stylesheet for dashboard, using bootstrap -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    
-
 </head>
 <body>
     <!-- top bar -->
@@ -20,22 +18,29 @@
             <div class="top-bar-left">
                 <button class="open-btn" onclick="openDashboard()">☰ Menu</button>
             </div>
-    
+
             <div class="top-bar-center">
                 Neural Network-Based Deepfake Detection
             </div>
-    
+
             <div class="top-bar-right">
                 {% if user %}
-                    <span class="user-greeting-left">Hi, {{ user }}!</span>
-                    <a href="{{ url_for('logout') }}" class="auth-btn">Logout</a>
+                <div class="user-dropdown">
+                    <div class="avatar" onclick="toggleDropdown()">
+                        {{ user[0]|upper }}
+                    </div>
+                    <div id="dropdownMenu" class="dropdown-menu avatar-menu">
+                        <a href="{{ url_for('results') }}">Previous Results</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
                 {% else %}
-                    <a href="{{ url_for('index') }}" class="auth-btn">Login / Sign Up</a>
+                <a href="{{ url_for('index') }}" class="auth-btn">Login / Sign Up</a>
                 {% endif %}
             </div>
         </div>
     </div>
-    
+
     <!-- dashboard -->
     <div id="myDashboard" class="dashboard">
         <a href="javascript:void(0)" class="close-btn" onclick="closeDashboard()">&times;</a>
@@ -47,7 +52,7 @@
         <a href="https://evang-17.github.io/fypExpoSite/" target="_blank">About This App</a>
         <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
     </div>
-    
+
     <!-- content -->
     <div class="content">
         {% block content %}{% endblock %}
@@ -65,7 +70,7 @@
             document.getElementById("myDashboard").style.width = "250px";
             document.getElementsByClassName("content")[0].style.marginLeft = "250px";
         }
-        
+
         function closeDashboard() {
             document.getElementById("myDashboard").style.width = "0";
             document.getElementsByClassName("content")[0].style.marginLeft = "0";
@@ -89,6 +94,18 @@
         }
 
         window.onload = checkCookies;
+
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-dropdown')) {
+                const menu = document.getElementById("dropdownMenu");
+                if (menu) menu.style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>
