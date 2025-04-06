@@ -262,7 +262,7 @@ def google_login():
     if not id_token:
         return jsonify({"error": "Missing ID token"}), 400
 
-    url = f"https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={"AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg"}"
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBoUCKaswlxAlXTyO_5LCDjl10lEXqKmNg"
     response = requests.post(url, json={"idToken": id_token})
 
     if response.status_code == 200:
