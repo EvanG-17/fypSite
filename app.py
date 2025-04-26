@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import pyrebase
 from datetime import datetime
-from Y import load_dotenv
+from dotenv import load_dotenv
 import os
 import torch
 import torch.nn as nn
