@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import pyrebase
 from datetime import datetime
-from dotenv import load_dotenv
+from Y import load_dotenv
 import os
 import torch
 import torch.nn as nn
@@ -51,6 +51,7 @@ def index():
                 return redirect(url_for('index'))
 
             session['user'] = email
+            session['id_token'] = user['idToken']
             return redirect(url_for('home'))
 
         except:
@@ -62,10 +63,13 @@ def index():
 
 
 
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
+    session.pop('id_token', None)
     return redirect(url_for('index'))
+
 
 
 
@@ -78,6 +82,9 @@ def signup():
             user = auth.create_user_with_email_and_password(email, password)
 
             id_token = user['idToken']
+            session['user'] = email
+            session['id_token'] = id_token
+
             requests.post(
                 "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + config['apiKey'],
                 json={"requestType": "VERIFY_EMAIL", "idToken": id_token}
@@ -91,6 +98,7 @@ def signup():
             return redirect(url_for('signup'))
 
     return render_template('signup.html', user=session.get('user'))
+
 
 
 
@@ -171,7 +179,7 @@ def results():
 
     user_email = session['user']
     safe_email = user_email.replace('.', '_')
-    firebase_data = firebase.database().child("results").child(safe_email).get()
+    firebase_data = firebase.database().child("results").child(safe_email).get(token=session['id_token'])
 
     results = []
     if firebase_data.each():
@@ -185,6 +193,7 @@ def results():
             })
 
     return render_template('results.html', results=results)
+
 
 
 
@@ -214,10 +223,8 @@ def home():
 
             confidence = round(deepfakeProbability * 100, 2)
             
-            # Set result based on 30% threshold
             result = "Deepfake" if confidence > 30 else "Real"
 
-            # Only save results if logged in
             if user_email:
                 safe_email = user_email.replace('.', '_')
                 db = firebase.database()
@@ -227,7 +234,7 @@ def home():
                     "label": result,
                     "probability": confidence
                 }
-                db.child("results").child(safe_email).push(entry)
+                db.child("results").child(safe_email).push(entry, token=session['id_token'])
 
             return render_template(
                 'home.html',
@@ -247,6 +254,7 @@ def home():
 
 
 
+# fixed
 @app.route('/account/delete')
 def delete_account_page():
     if 'user' not in session:
