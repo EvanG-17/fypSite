@@ -261,7 +261,7 @@ def delete_account_page():
         return redirect(url_for('index'))
     return render_template('delete_account.html')
 
-
+# Storing id token also, as forgotten due to firebase rt db fix
 @app.route('/google-login', methods=['POST'])
 def google_login():
     data = request.get_json()
@@ -279,11 +279,13 @@ def google_login():
 
         if email:
             session['user'] = email
+            session['id_token'] = id_token
             return jsonify({"message": "Login successful"}), 200
         else:
             return jsonify({"error": "Email missing"}), 400
     else:
         return jsonify({"error": "Invalid token or request"}), 401
+
 
 
 
