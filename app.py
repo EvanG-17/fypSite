@@ -105,14 +105,15 @@ def signup():
 # Delete all results
 @app.route('/delete_results', methods=['POST'])
 def delete_results():
-    if 'user' not in session:
+    if 'user' not in session or 'id_token' not in session:
         return redirect(url_for('index'))
 
     safe_email = session['user'].replace('.', '_')
-    firebase.database().child("results").child(safe_email).remove()
+    firebase.database().child("results").child(safe_email).remove(token=session['id_token'])
 
     flash("All results deleted successfully.")
     return redirect(url_for('results'))
+
 
 
 
