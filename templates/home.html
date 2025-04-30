@@ -41,7 +41,8 @@
             const probability = parseFloat(container.dataset.probability) || 0;
             const result = container.dataset.result;
 
-            const resultColor = result === 'Deepfake' ? '#FF5252' : '#4CAF50';
+            const resultColor = probability > 30 ? '#FF5252' : '#4CAF50';
+
 
             const bar = new ProgressBar.Circle(container, {
                 color: resultColor,
