@@ -41,6 +41,8 @@
             const probability = parseFloat(container.dataset.probability) || 0;
             const result = container.dataset.result;
 
+            
+            // Fixed to make it not depend on reuslt but probability
             const resultColor = probability > 30 ? '#FF5252' : '#4CAF50';
 
 
