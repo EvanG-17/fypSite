@@ -224,7 +224,8 @@ def home():
 
             confidence = round(deepfakeProbability * 100, 2)
             
-            result = "Deepfake" if confidence > 30 else "Real"
+            # Changed back to just Deepfaked as the grammer was incorrect
+            result = "deepfaked"
 
             if user_email:
                 safe_email = user_email.replace('.', '_')
